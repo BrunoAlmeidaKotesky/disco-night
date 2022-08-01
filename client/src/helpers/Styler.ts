@@ -1,5 +1,5 @@
+import type {RadiusStyle} from '../models/CommonTypes';
 
-type RadiusStyle = number | Record<'tl'|'tr'|'bl'|'br', number>;
 export class Styles {
 
     public neonBlock(ctx: CanvasRenderingContext2D, canvasHeight: number): CanvasFillStrokeStyles['fillStyle'] {

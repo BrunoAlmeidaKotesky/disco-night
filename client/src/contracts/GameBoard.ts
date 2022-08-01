@@ -1,11 +1,12 @@
 import styler from '../helpers/Styler';
+import type {BoardMatrix} from '../models/CommonTypes';
+import { Player } from './Player';
 
-type BoardMatrix = number[][];
 let last: number;
 let dt: number;
 
-export class Board {
-    private boardArea: BoardMatrix = [
+export class GameBoard {
+    public boardArea: BoardMatrix = [
         [0, 1, 1, 1, 0],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
@@ -13,13 +14,16 @@ export class Board {
         [0, 1, 1, 1, 0]
     ];
     private squareSize = 124 as const;
+    public player: Player;
 
     constructor(public ctx: CanvasRenderingContext2D, public canvas: HTMLCanvasElement) {
-        this.gameLoop = this.gameLoop.bind(this);
-        this.initBoard();
+        this.renderBoard();
+        this.gameAnimationLoop = this.gameAnimationLoop.bind(this);
+        this.player = new Player(ctx, canvas, this.boardArea);
+        this.player.draw();
     }
 
-    private initBoard() {
+    private renderBoard() {
         let x = 0;
         let y = 0;
         for (let boardIdx = 0; boardIdx < this.boardArea.length; boardIdx++) {
@@ -31,7 +35,6 @@ export class Board {
                 if (cell === 1) {
                     if(colIdx !== 0)
                         y += this.squareSize;
-                    //A padding of 1px is added to each side of the square to make it look better.
                     this.ctx.strokeStyle = styler.neonBlock(this.ctx, this.canvas.height);
                     styler.roundRect(this.ctx, x + 1, y + 1, this.squareSize - 8, this.squareSize - 8, 24);
                 }
@@ -43,17 +46,11 @@ export class Board {
                     y = 0;
             }
         }
-        requestAnimationFrame(this.gameLoop);
     }
     
-    private gameLoop(timestamp: number) {
-        requestAnimationFrame(this.gameLoop);
-        
-        if (!last) {
-            last = timestamp;
-        }
-        dt = timestamp - last;
-        last = timestamp;
+    public gameAnimationLoop(timestamp?: number) {
+        requestAnimationFrame(this.gameAnimationLoop);
+        this.player.update();
+        this.renderBoard();
     }
 }
-

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { Renderer } from "../contracts/Renderer";
-  import { Board } from "../contracts/Board";
+  import { GameBoard } from "../contracts/GameBoard";
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   let canvasWidth: number = 620;
@@ -9,8 +8,8 @@
 
   onMount(() => {
     ctx = canvas.getContext("2d");
-    //new Renderer(ctx);
-    new Board(ctx, canvas);
+    const gameBoard = new GameBoard(ctx, canvas);
+    gameBoard.gameAnimationLoop();
   });
 </script>
 
