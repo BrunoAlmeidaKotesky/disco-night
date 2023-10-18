@@ -48,7 +48,7 @@ export class GameBoard {
         }
     }
     
-    public gameAnimationLoop(timestamp?: number) {
+    public gameAnimationLoop() {
         requestAnimationFrame(this.gameAnimationLoop);
         this.player.update();
         this.renderBoard();

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { GameBoard } from "../contracts/GameBoard";
+  import { GameBoard } from "../logic/GameBoard";
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   let canvasWidth: number = 620;
