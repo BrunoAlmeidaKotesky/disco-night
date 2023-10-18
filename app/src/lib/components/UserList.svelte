@@ -1,11 +1,11 @@
 <!-- src/components/UserList.svelte -->
 <script lang="ts">
-  import { usersInRoomStore } from "../stores/P2PConnection";
+  import { p2pStore } from "../stores/P2PConnection";
 </script>
 
-{#if $usersInRoomStore.length > 0}
+{#if $p2pStore.usersInRoom.length > 0}
   <ul>
-    {#each $usersInRoomStore as user}
+    {#each $p2pStore.usersInRoom as user}
       <li>{user}</li>
     {/each}
   </ul>

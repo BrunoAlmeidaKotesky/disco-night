@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PeerManager } from "$lib/services/P2PManager";
   import { browser } from "$app/environment";
-  import { roomIdStore } from "../stores/P2PConnection";
+  import { p2pStore } from "$lib/stores/P2PConnection";
 
   const peerManager = new PeerManager();
 
@@ -21,7 +21,7 @@
   <input bind:value={nickname} placeholder="Digite seu apelido" />
   <button on:click={createRoom}>Criar Sala</button>
 
-  {#if $roomIdStore}
-    <div>Seu ID de sala é: {$roomIdStore}</div>
+  {#if $p2pStore.roomId}
+    <div>Seu ID de sala é: {$p2pStore.roomId}</div>
   {/if}
 </div>

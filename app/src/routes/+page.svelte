@@ -1,21 +1,17 @@
 <script>
-  import Lobby from "$lib/components/Lobby.svelte";
+  import UserList from "$lib/components/UserList.svelte";
 </script>
 
-<Lobby />
+<nav>
+  <a href="/">Home</a>
+  <a href="/create">Create Lobby</a>
+  <a href="/join">Join Lobby</a>
+</nav>
+<UserList />
 
 <style>
   :root {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  }
-
-  main {
-    text-align: center;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neu  e", sans-serif;
   }
 </style>

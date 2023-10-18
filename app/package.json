@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"immer": "^10.0.3",
 		"peerjs": "^1.5.1"
 	}
 }
