@@ -25,5 +25,13 @@ module.exports = {
 				parser: '@typescript-eslint/parser'
 			}
 		}
-	]
+	],
+	rules: {
+		'@typescript-eslint/explicit-member-accessibility': ['error', {
+			accessibility: 'explicit',
+			overrides: {
+				constructors: 'no-public',
+			},
+		}]
+	}
 };

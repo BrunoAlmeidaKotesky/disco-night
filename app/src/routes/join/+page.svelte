@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PeerManager } from "$lib/services/P2PManager";
   import { browser } from "$app/environment";
-  import { onMount } from "svelte";
+  import { onMountBrowser } from "$lib/helpers/onMountBrowser";
 
   const peerManager = new PeerManager();
 
@@ -9,31 +9,30 @@
   let nickname = "";
   let roomMessage = "";
 
-  onMount(async () => {
-    if (!browser) return;
+  onMountBrowser(async () => {
     await peerManager.initializePeer(false);
   });
 
   async function joinRoom() {
     if (!browser || !joinId || !nickname) {
-      roomMessage = "Por favor, insira um apelido e ID de sala válido.";
+      roomMessage = "Please enter a nickname and a room ID.";
       return;
     }
 
     const conn = peerManager.connectToPeer(joinId, nickname);
     if (!conn) {
-      roomMessage = "Não foi possível conectar ao peer.";
+      roomMessage = "Failed to connect to room.";
       return;
     }
   }
 </script>
 
-<!-- Restante do código HTML permanece inalterado -->
-
 <div>
-  <input bind:value={joinId} placeholder="Digite o ID da sala para entrar" />
-  <input bind:value={nickname} placeholder="Digite seu apelido" />
-  <button on:click={joinRoom}>Entrar na Sala</button>
+  <p>Enter the room ID</p>
+  <input bind:value={joinId} />
+  <p>Enter a nickname</p>
+  <input bind:value={nickname} />
+  <button disabled={!(joinId && nickname)} on:click={joinRoom}>Join</button>
 
   {#if roomMessage}
     <div class="roomMessage">{roomMessage}</div>

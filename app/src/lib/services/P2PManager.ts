@@ -1,7 +1,8 @@
 // src/services/P2PManager.ts
 
 import type { DataConnection, Peer } from "peerjs";
-import { updateP2PStore } from '$lib/stores/P2PConnection';  // Atualize isso para o caminho correto do seu arquivo de store
+import { p2pStore, updateP2PStore } from '$lib/stores/P2PConnection';  // Atualize isso para o caminho correto do seu arquivo de store
+import { get } from "svelte/store";
 
 
 export class PeerManager {
@@ -9,7 +10,7 @@ export class PeerManager {
     private isHost: boolean = false;
 
 
-    async initializePeer(isHost: boolean): Promise<void> {
+    public async initializePeer(isHost: boolean): Promise<void> {
         this.isHost = isHost;
         const Peer = (await import("peerjs")).default;
         this.peer = new Peer({ debug: 2 });
@@ -27,21 +28,21 @@ export class PeerManager {
         this.peer.on("connection", this.handleConnection.bind(this));
     }
 
-    handleConnection(conn: DataConnection): void {
+    private handleConnection(conn: DataConnection): void {
         console.log(`Connection established with: ${conn.peer}`);
         if (this.isHost) {
             this.handleHostConnection(conn);
         }
     }
 
-    handleHostConnection(conn: DataConnection): void {
+    private handleHostConnection(conn: DataConnection): void {
         updateP2PStore(draft => {
             draft.connections.push(conn);
             draft.usersInRoom.push(conn.metadata.nickname);
         });
     }
 
-    connectToPeer(peerId: string, nickname: string): DataConnection | null {
+    public connectToPeer(peerId: string, nickname: string): DataConnection | null {
         if (!this.peer) {
             console.error("Peer object is not initialized");
             return null;
@@ -59,5 +60,23 @@ export class PeerManager {
         });
 
         return conn;
+    }
+
+    public get store() {
+        return get(p2pStore);
+    }
+
+    public destroyPeer(): void {
+        if (this.peer && this.isHost && this.store.usersInRoom.length === 1) {
+            this.peer.destroy();
+            this.peer = null;
+            this.isHost = false;
+            updateP2PStore(draft => {
+                draft.peer = null;
+                draft.connections = [];
+                draft.roomId = "";
+                draft.usersInRoom = [];
+            });
+        }
     }
 }
